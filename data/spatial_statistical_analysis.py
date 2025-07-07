@@ -6,7 +6,6 @@ from scipy.spatial.distance import cdist
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.cluster import DBSCAN
-from sklearn.preprocessing import StandardScaler
 import esda
 from libpysal.weights import Queen, KNN
 from splot.esda import moran_scatterplot, lisa_cluster
@@ -138,16 +137,13 @@ def spatial_analysis(df):
     # 1. Spatial Clustering Analysis (DBSCAN)
     coords = np.column_stack([gdf_proj.geometry.x, gdf_proj.geometry.y])
     
-    # Standardize coordinates
-    scaler = StandardScaler()
-    coords_scaled = scaler.fit_transform(coords)
-    
-    # DBSCAN clustering (eps in degrees, min_samples for cluster)
-    eps = 0.01  # roughly 1km in projected coordinates
+    # DBSCAN clustering directly on projected coordinates (meters)
+    # eps is approximately 1km
+    eps = 1000
     min_samples = 10
-    
+
     dbscan = DBSCAN(eps=eps, min_samples=min_samples)
-    clusters = dbscan.fit_predict(coords_scaled)
+    clusters = dbscan.fit_predict(coords)
     
     gdf['cluster'] = clusters
     n_clusters = len(set(clusters)) - (1 if -1 in clusters else 0)
