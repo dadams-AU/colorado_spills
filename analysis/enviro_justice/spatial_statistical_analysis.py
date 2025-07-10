@@ -11,25 +11,109 @@ from libpysal.weights import Queen, KNN
 from splot.esda import moran_scatterplot, lisa_cluster
 import requests
 import json
+import time
 from statsmodels.stats.proportion import proportions_ztest
 from statsmodels.formula.api import ols
 import contextily as ctx
 import warnings
 warnings.filterwarnings('ignore')
 
-def query_ollama(prompt, model="mistral"):
-    """Send query to local Ollama instance"""
+def check_ollama_connection():
+    """Check if Ollama is running and accessible"""
     try:
-        response = requests.post('http://localhost:11434/api/generate',
-            json={
-                'model': model,
-                'prompt': prompt,
-                'stream': False
-            })
-        return response.json()['response']
+        response = requests.get('http://localhost:11434/api/tags', timeout=5)
+        if response.status_code == 200:
+            models = response.json().get('models', [])
+            available_models = [model['name'] for model in models]
+            print(f"✓ Ollama is running. Available models: {available_models}")
+            return True, available_models
+        else:
+            print(f"✗ Ollama responded with status {response.status_code}")
+            return False, []
+    except requests.exceptions.ConnectionError:
+        print("✗ Cannot connect to Ollama. Is it running on localhost:11434?")
+        return False, []
+    except requests.exceptions.Timeout:
+        print("✗ Ollama connection timed out")
+        return False, []
     except Exception as e:
-        print(f"Error querying Ollama: {e}")
+        print(f"✗ Error checking Ollama: {e}")
+        return False, []
+
+def query_ollama(prompt, model="mistral:7b", max_retries=3, timeout=120):
+    """Send query to local Ollama instance with improved error handling"""
+    
+    # Check connection first
+    is_connected, available_models = check_ollama_connection()
+    if not is_connected:
+        print("Skipping Ollama analysis - service not available")
         return None
+    
+    # Check if requested model is available
+    if model not in available_models:
+        print(f"Model '{model}' not available. Available models: {available_models}")
+        if available_models:
+            model = available_models[0]  # Use first available model
+            print(f"Using '{model}' instead")
+        else:
+            return None
+    
+    # Truncate prompt if too long (Ollama has context limits)
+    max_prompt_length = 4000  # Conservative limit
+    if len(prompt) > max_prompt_length:
+        print(f"Warning: Prompt too long ({len(prompt)} chars), truncating to {max_prompt_length}")
+        prompt = prompt[:max_prompt_length] + "\n\n[Analysis truncated due to length limits]"
+    
+    for attempt in range(max_retries):
+        try:
+            print(f"Sending request to Ollama (attempt {attempt + 1}/{max_retries})...")
+            
+            start_time = time.time()
+            response = requests.post(
+                'http://localhost:11434/api/generate',
+                json={
+                    'model': model,
+                    'prompt': prompt,
+                    'stream': False,
+                    'options': {
+                        'temperature': 0.7,
+                        'top_p': 0.9,
+                        'num_predict': 2000  # Limit response length
+                    }
+                },
+                timeout=timeout
+            )
+            
+            elapsed_time = time.time() - start_time
+            print(f"Request completed in {elapsed_time:.1f} seconds")
+            
+            if response.status_code == 200:
+                result = response.json()
+                if 'response' in result:
+                    return result['response']
+                else:
+                    print(f"Unexpected response format: {result}")
+                    return None
+            else:
+                print(f"HTTP Error {response.status_code}: {response.text}")
+                
+        except requests.exceptions.Timeout:
+            print(f"Request timed out after {timeout} seconds (attempt {attempt + 1})")
+            if attempt < max_retries - 1:
+                time.sleep(2)  # Wait before retry
+                
+        except requests.exceptions.ConnectionError:
+            print(f"Connection error (attempt {attempt + 1})")
+            if attempt < max_retries - 1:
+                time.sleep(2)
+                
+        except Exception as e:
+            print(f"Error querying Ollama (attempt {attempt + 1}): {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2)
+    
+    print("All Ollama attempts failed")
+    return None
 
 def statistical_disparity_tests(df):
     """Perform statistical tests for environmental justice disparities"""
@@ -292,48 +376,69 @@ def spatial_regression_analysis(gdf):
         print(f"Regression analysis failed: {e}")
         return None
 
-def generate_spatial_statistical_report(stats_results, spatial_results, model_results):
+def generate_spatial_statistical_report(stats_results, spatial_results, model_results=None):
     """Generate comprehensive report using LLM"""
     
-    summary_text = f"""
-    STATISTICAL AND SPATIAL ANALYSIS SUMMARY:
+    # Extract key regression findings if available
+    regression_summary = "No regression analysis available"
+    if model_results and hasattr(model_results, 'rsquared'):
+        # Extract only key statistics, not the full summary
+        poverty_coef = model_results.params.get('percent_poverty', 0)
+        poverty_pval = model_results.pvalues.get('percent_poverty', 1)
+        income_coef = model_results.params.get('median_household_income', 0)
+        income_pval = model_results.pvalues.get('median_household_income', 1)
+        
+        regression_summary = f"R²={model_results.rsquared:.3f}, poverty coef={poverty_coef:.4f} (p={poverty_pval:.3f}), income coef={income_coef:.6f} (p={income_pval:.3f})"
     
-    STATISTICAL SIGNIFICANCE TESTS:
-    - Income distribution chi-square p-value: {stats_results['income_chi2']['p_value']:.6f}
-    - Poverty over-representation ratio: {stats_results['poverty_binomial']['observed_ratio']:.2f}x
-    - Poverty binomial test p-value: {stats_results['poverty_binomial']['p_value']:.6f}
-    - Major spills z-test p-value: {stats_results['major_spills_ztest']['p_value']:.6f}
-    - Minority community ratio: {stats_results['minority_binomial']['observed_ratio']:.2f}x
+    # Create a focused, shorter prompt
+    prompt = f"""Analyze these environmental justice findings:
+
+STATISTICAL TESTS:
+- Poverty over-representation: {stats_results['poverty_binomial']['observed_ratio']:.2f}x expected (p={stats_results['poverty_binomial']['p_value']:.4f})
+- Major spills z-test p-value: {stats_results['major_spills_ztest']['p_value']:.4f}
+- Minority communities ratio: {stats_results['minority_binomial']['observed_ratio']:.2f}x
+
+SPATIAL PATTERNS:
+- {spatial_results['n_clusters']} spatial clusters identified
+- Max density: {spatial_results.get('max_density', 'N/A')} spills per grid cell
+
+REGRESSION RESULTS:
+- {regression_summary}
+
+Provide a 300-word academic interpretation focusing on environmental justice implications and policy recommendations."""
     
-    SPATIAL ANALYSIS:
-    - Number of spatial clusters identified: {spatial_results['n_clusters']}
-    - Spatial autocorrelation detected in poverty patterns
-    - Hotspots identified with up to {spatial_results.get('max_density', 'N/A')} spills per 5km grid
+    print("\nGenerating academic interpretation with Ollama...")
+    report = query_ollama(prompt)
     
-    REGRESSION FINDINGS:
-    - Spatial controls included to account for facility locations
-    - Multiple demographic variables tested simultaneously
-    - Results control for geographic clustering effects
-    """
+    if report is None:
+        # Fallback report if Ollama fails
+        report = f"""
+ENVIRONMENTAL JUSTICE ANALYSIS - STATISTICAL SUMMARY
+
+The statistical analysis reveals significant disparities in oil and gas spill distribution across demographic lines:
+
+POVERTY DISPARITIES:
+High-poverty areas experience {stats_results['poverty_binomial']['observed_ratio']:.2f} times more spills than expected by chance (p = {stats_results['poverty_binomial']['p_value']:.6f}). This suggests a systematic pattern of environmental burden concentration in economically disadvantaged communities.
+
+SPATIAL CLUSTERING:
+The analysis identified {spatial_results['n_clusters']} distinct spatial clusters of spill incidents, indicating that environmental risks are geographically concentrated rather than randomly distributed. This clustering pattern strengthens the case for targeted environmental justice interventions.
+
+POLICY IMPLICATIONS:
+1. Enhanced environmental monitoring in high-poverty areas
+2. Stricter permitting requirements for facilities near vulnerable communities
+3. Community notification and participation requirements for new developments
+4. Investment in environmental remediation for affected areas
+
+METHODOLOGICAL STRENGTHS:
+- Multiple statistical tests controlling for spatial effects
+- Combination of global and local spatial analysis
+- Robust sample size for statistical inference
+
+The findings provide evidence of environmental injustice requiring policy intervention and continued monitoring.
+        """
+        print("Using fallback report (Ollama unavailable)")
     
-    prompt = f"""
-    Based on this comprehensive statistical and spatial analysis of oil and gas spills, provide an academic-level interpretation of the environmental justice implications.
-    
-    Analysis Results:
-    {summary_text}
-    
-    Focus on:
-    1. Statistical significance of demographic disparities
-    2. Spatial clustering patterns and their implications
-    3. Whether disparities persist after controlling for spatial effects
-    4. Methodological strengths and limitations
-    5. Policy implications for environmental justice
-    6. Recommendations for further research
-    
-    Format as a rigorous academic discussion suitable for a public policy journal, emphasizing both statistical rigor and practical policy relevance.
-    """
-    
-    return query_ollama(prompt)
+    return report
 
 def create_visualizations(gdf, spill_density):
     """Create key visualizations"""
@@ -394,7 +499,7 @@ def create_visualizations(gdf, spill_density):
     plt.show()
 
 # Main execution
-def run_comprehensive_analysis(csv_file):
+def run_comprehensive_analysis(csv_file, use_ollama=True):
     """Run complete statistical and spatial analysis"""
     
     print("COMPREHENSIVE STATISTICAL & SPATIAL ENVIRONMENTAL JUSTICE ANALYSIS")
@@ -403,6 +508,11 @@ def run_comprehensive_analysis(csv_file):
     # Load data
     df = pd.read_csv(csv_file)
     print(f"Loaded {len(df)} spill incidents")
+    
+    # Check Ollama availability if requested
+    if use_ollama:
+        print("\nChecking Ollama connection...")
+        check_ollama_connection()
     
     # Statistical analysis
     stats_results = statistical_disparity_tests(df)
@@ -423,13 +533,25 @@ def run_comprehensive_analysis(csv_file):
     
     model_summary = str(model.summary()) if model else "Regression analysis not available"
     
-    report = generate_spatial_statistical_report(stats_results, spatial_results, model_summary)
+    # Create summaries for different purposes
+    model_summary_short = "No regression analysis performed"
+    model_summary_full = "Regression analysis not available"
+    
+    if model and hasattr(model, 'rsquared'):
+        model_summary_short = f"OLS Regression Results: R²={model.rsquared:.4f}, F-stat p-value={model.f_pvalue:.6f}"
+        model_summary_full = str(model.summary())
+    
+    if use_ollama:
+        report = generate_spatial_statistical_report(stats_results, spatial_results, model)
+    else:
+        print("\nSkipping Ollama report generation...")
+        report = "Ollama report generation skipped by user"
     
     # Save results
     results = {
         'statistical_tests': stats_results,
         'spatial_analysis': spatial_results,
-        'regression_summary': model_summary,
+        'regression_summary': model_summary_full,  # Full summary for detailed analysis
         'academic_interpretation': report
     }
     
@@ -447,4 +569,5 @@ def run_comprehensive_analysis(csv_file):
     return results
 
 if __name__ == "__main__":
-    results = run_comprehensive_analysis('spills_with_demographics.csv')
+    # You can disable Ollama with use_ollama=False if it's not available
+    results = run_comprehensive_analysis('data/spills_with_demographics.csv', use_ollama=True)

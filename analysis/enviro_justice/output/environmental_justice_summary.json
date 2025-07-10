@@ -1,0 +1,109 @@
+{
+  "dataset_overview": {
+    "total_spills": 16890,
+    "date_range": "1994-2024",
+    "historical_spills": "5828",
+    "recent_spills": "11062"
+  },
+  "demographic_patterns": {
+    "high_poverty_spills": "3497",
+    "low_poverty_spills": "13393",
+    "minority_community_spills": "1047",
+    "majority_white_spills": "15843"
+  },
+  "spill_severity": {
+    "high_poverty_mean_volume": 27.53474406634258,
+    "low_poverty_mean_volume": 13.991338759053237,
+    "historical_mean_volume": 0.3812628689087165,
+    "recent_mean_volume": 25.44322907250045,
+    "high_poverty_major_rate": 0.36860165856448385,
+    "low_poverty_major_rate": 0.2687224669603524
+  },
+  "reporting_delays": {
+    "high_poverty_delay_mean": 4.780669144981412,
+    "low_poverty_delay_mean": 11.250727992234749,
+    "historical_rate_high_poverty": 0.15556191020875035,
+    "historical_rate_low_poverty": 0.3945344582991115
+  },
+  "environmental_impacts": {
+    "soil": {
+      "high_poverty_rate": 0.46496997426365455,
+      "low_poverty_rate": 0.48077353841559023,
+      "historical_rate": 0.6185655456417296,
+      "recent_rate": 0.4031820647260893
+    },
+    "groundwater": {
+      "high_poverty_rate": 0.019445238776093794,
+      "low_poverty_rate": 0.07078324497872023,
+      "historical_rate": 0.11890871654083733,
+      "recent_rate": 0.029199059844512747
+    },
+    "Surface Water": {
+      "high_poverty_rate": 0.008864741206748641,
+      "low_poverty_rate": 0.0036586276413051594,
+      "historical_rate": 0.00017158544955387783,
+      "recent_rate": 0.007141565720484542
+    }
+  },
+  "facility_patterns": {
+    "false": {
+      "CENTRALIZED EP WASTE MGMT FAC": 0.005906406179009541,
+      "CRUDE OIL TRANSFER LINE": 0.0007572315614114796,
+      "DOMESTIC TAP": 0.00015144631228229593,
+      "DUMPLINE": 7.572315614114796e-05,
+      "FLOWLINE": 0.08503710434650916,
+      "FLOWLINE SYSTEM": 0.04982583674087536,
+      "GAS COMPRESSOR STATION": 0.0066636377404210205,
+      "GAS GATHERING PIPELINE SYSTEM": 0.022414054217779797,
+      "GAS GATHERING SYSTEM": 0.006285021959715281,
+      "GAS PROCESSING PLANT": 0.00371043465091625,
+      "Location": 0.0,
+      "OFF-LOCATION FLOWLINE": 0.023171285779191277,
+      "OIL AND GAS LOCATION": 0.05338482507950931,
+      "OTHER": 0.03505982129335151,
+      "PARTIALLY-BURIED VESSEL": 0.02407996365288505,
+      "PIPELINE": 0.04195062850219597,
+      "PIT": 0.013630168105406633,
+      "PRODUCED WATER TRANSFER SYSTEM": 0.021732545812509465,
+      "PRODUCTION LINE": 7.572315614114796e-05,
+      "TANK BATTERY": 0.311146448583977,
+      "WATER GATHERING SYSTEM/LINE": 0.010601241859760715,
+      "WELL": 0.15182492806300166,
+      "WELL PAD": 0.08231107072542783,
+      "WELL SITE": 0.0502044525215811
+    },
+    "true": {
+      "CENTRALIZED EP WASTE MGMT FAC": 0.0020207852193995382,
+      "CRUDE OIL TRANSFER LINE": 0.0,
+      "DOMESTIC TAP": 0.0,
+      "DUMPLINE": 0.0,
+      "FLOWLINE": 0.08862586605080831,
+      "FLOWLINE SYSTEM": 0.03146651270207852,
+      "GAS COMPRESSOR STATION": 0.006062355658198615,
+      "GAS GATHERING PIPELINE SYSTEM": 0.01674364896073903,
+      "GAS GATHERING SYSTEM": 0.005484988452655889,
+      "GAS PROCESSING PLANT": 0.005196304849884526,
+      "Location": 0.0002886836027713626,
+      "OFF-LOCATION FLOWLINE": 0.015011547344110854,
+      "OIL AND GAS LOCATION": 0.050519630484988455,
+      "OTHER": 0.038394919168591224,
+      "PARTIALLY-BURIED VESSEL": 0.0023094688221709007,
+      "PIPELINE": 0.03954965357967667,
+      "PIT": 0.024826789838337183,
+      "PRODUCED WATER TRANSFER SYSTEM": 0.032043879907621246,
+      "PRODUCTION LINE": 0.0,
+      "TANK BATTERY": 0.33602771362586603,
+      "WATER GATHERING SYSTEM/LINE": 0.05918013856812933,
+      "WELL": 0.17927251732101618,
+      "WELL PAD": 0.047055427251732104,
+      "WELL SITE": 0.01991916859122402
+    }
+  },
+  "top_root_causes": {
+    "Historical impacts were discovered during flowline decommissioning activities.": 204,
+    "Historical impacts were discovered during tank battery decommissioning activities.": 187,
+    "Historical impacts were discovered during wellhead cut and cap activities.": 160,
+    "Historically impacted soils were discovered following cut and cap operations at the wellhead.": 61,
+    "Unknown": 60
+  }
+}

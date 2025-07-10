@@ -1,0 +1,125 @@
+{
+  "disparity_analysis": {
+    "poverty_historical": {
+      "chi2_statistic": 699.6653328118817,
+      "p_value": 3.535735417673697e-154,
+      "high_poverty_rate": 0.15556191020875035,
+      "low_poverty_rate": 0.3945344582991115,
+      "rate_ratio": 0.3942923284303167
+    },
+    "race_historical": {
+      "z_statistic": -9.415701116219894,
+      "p_value": 4.6993549936195405e-21,
+      "minority_rate": 0.2110792741165234,
+      "white_rate": 0.3539102442719182,
+      "rate_ratio": 0.5964203566663243
+    },
+    "delay_poverty": {
+      "t_statistic": -2.6749772390371573,
+      "p_value": 0.0074806346630392736,
+      "high_poverty_mean": 4.780669144981412,
+      "low_poverty_mean": 11.227873627604751,
+      "difference": -6.447204482623339
+    }
+  },
+  "spatial_clusters": 56,
+  "temporal_trends": [
+    {
+      "report_year": 2014,
+      "spill_classification": 315,
+      "percent_poverty": 10.349361277910711,
+      "median_household_income": 77667.243140965,
+      "total_spills": 1057,
+      "historical_rate": 0.2980132450331126
+    },
+    {
+      "report_year": 2015,
+      "spill_classification": 513,
+      "percent_poverty": 10.747263548015491,
+      "median_household_income": 77480.53987730062,
+      "total_spills": 1630,
+      "historical_rate": 0.3147239263803681
+    },
+    {
+      "report_year": 2016,
+      "spill_classification": 441,
+      "percent_poverty": 11.003814947091984,
+      "median_household_income": 75793.0828488372,
+      "total_spills": 1376,
+      "historical_rate": 0.32049418604651164
+    },
+    {
+      "report_year": 2017,
+      "spill_classification": 447,
+      "percent_poverty": 10.244594774187261,
+      "median_household_income": 79214.63687150838,
+      "total_spills": 1611,
+      "historical_rate": 0.2774674115456238
+    },
+    {
+      "report_year": 2018,
+      "spill_classification": 526,
+      "percent_poverty": 11.044440909402196,
+      "median_household_income": 77269.86923562855,
+      "total_spills": 1583,
+      "historical_rate": 0.3322804801010739
+    },
+    {
+      "report_year": 2019,
+      "spill_classification": 365,
+      "percent_poverty": 11.0412982422655,
+      "median_household_income": 77101.10475578406,
+      "total_spills": 1556,
+      "historical_rate": 0.2345758354755784
+    },
+    {
+      "report_year": 2020,
+      "spill_classification": 254,
+      "percent_poverty": 10.63066207467279,
+      "median_household_income": 78393.95996592844,
+      "total_spills": 1174,
+      "historical_rate": 0.21635434412265758
+    },
+    {
+      "report_year": 2021,
+      "spill_classification": 630,
+      "percent_poverty": 9.848223842119726,
+      "median_household_income": 82168.27640449438,
+      "total_spills": 1780,
+      "historical_rate": 0.3539325842696629
+    },
+    {
+      "report_year": 2022,
+      "spill_classification": 863,
+      "percent_poverty": 9.587290470770567,
+      "median_household_income": 82386.95293569431,
+      "total_spills": 2146,
+      "historical_rate": 0.402143522833178
+    },
+    {
+      "report_year": 2023,
+      "spill_classification": 958,
+      "percent_poverty": 9.819562060500846,
+      "median_household_income": 81237.21473278767,
+      "total_spills": 2077,
+      "historical_rate": 0.4612421762156957
+    },
+    {
+      "report_year": 2024,
+      "spill_classification": 516,
+      "percent_poverty": 9.972344499637526,
+      "median_household_income": 80731.96777777778,
+      "total_spills": 900,
+      "historical_rate": 0.5733333333333334
+    }
+  ],
+  "interpretation": " This analysis provides compelling evidence of environmental injustice, as it reveals disproportionate reporting delays and higher incidences of oil/gas spills in economically disadvantaged areas and minority communities. These findings underscore the systemic marginalization of these communities and their limited access to resources for environmental oversight and monitoring.\n\nFirstly, the environmental justice implications of reporting delays are significant. Delayed discovery and response to oil/gas spills can lead to increased contamination of air, water, and soil, resulting in long-term health hazards for affected communities. Moreover, these delays exacerbate existing social and economic disparities by disproportionately impacting the health and wellbeing of already vulnerable populations.\n\nSecondly, the analysis highlights institutional barriers and oversight gaps that contribute to these reporting disparities. The findings suggest that weaker environmental monitoring in high-poverty areas and minority communities may be due to insufficient regulatory resources, lack of community engagement, or systemic biases within enforcement agencies. These factors collectively undermine the effectiveness of environmental protection efforts, perpetuating environmental injustice.\n\nThirdly, to address these challenges, policy recommendations for improved monitoring should prioritize resource allocation and regulatory oversight in marginalized communities. This may involve increasing the number of environmental inspectors in high-poverty areas, implementing community-based monitoring programs, and enhancing penalties for noncompliance with environmental regulations. Additionally, promoting transparency and accountability within enforcement agencies can help ensure equitable enforcement across all communities.\n\nLastly, empowering communities to participate actively in environmental decision-making processes is essential for achieving lasting change. This can be achieved through community education programs, participatory mapping initiatives, and partnerships between governmental agencies, non-governmental organizations, and affected communities. By giving voice to marginalized communities, we can create a more equitable and sustainable future for all.\n\nIn conclusion, this analysis underscores the urgent need for policy action to address reporting disparities in oil/gas spills. By addressing institutional barriers, improving monitoring practices, and empowering communities, we can work towards a more just and sustainable environment for all.",
+  "data_summary": {
+    "total_records": 16890,
+    "date_range": "2014-2024",
+    "spill_classifications": {
+      "Recent": 11062,
+      "Historical": 5828
+    }
+  }
+}

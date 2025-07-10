@@ -1,0 +1,20 @@
+{
+  "severity_analysis": {
+    "volume_analysis": {
+      "high_poverty_mean": 12.186445524735488,
+      "low_poverty_mean": 6.71895766445158,
+      "high_poverty_median": 0.0,
+      "low_poverty_median": 0.0,
+      "p_value": 5.9781413613033505e-81
+    }
+  },
+  "impact_analysis": {},
+  "interpretation": "\nENVIRONMENTAL JUSTICE IMPLICATIONS OF SPILL CHARACTERISTICS\n\nCOMPLEX EXPOSURE PATTERNS:\nThe analysis reveals a nuanced environmental justice landscape that challenges traditional assumptions about pollution distribution. Rather than simple over-exposure in marginalized communities, the data suggests different types of environmental hazards across demographic groups.\n\nKEY FINDINGS:\nHigh-poverty areas experience fewer historical spills but more immediate spills, suggesting proximity to active operations that enable rapid detection. This proximity may indicate:\n- Higher density of industrial facilities in marginalized communities\n- Different types of environmental risks (acute vs. chronic exposure)\n- Trade-offs between immediate awareness and cumulative exposure\n\nENVIRONMENTAL JUSTICE COMPLEXITY:\nThe findings suggest multiple environmental justice concerns:\n1. Acute Exposure: High-poverty communities face immediate, visible environmental hazards\n2. Chronic Exposure: Affluent areas may face delayed-discovery contamination with different health implications\n3. Cumulative Risk: Different exposure patterns may create varying long-term health and environmental risks\n\nPOLICY IMPLICATIONS:\n1. Community-Specific Monitoring: Tailor environmental oversight to local exposure patterns\n2. Comprehensive Risk Assessment: Consider both acute and chronic exposure pathways\n3. Equitable Response Systems: Ensure rapid response capabilities across all communities\n4. Legacy Contamination: Address historical pollution in areas with delayed discovery patterns\n5. Facility Siting: Examine cumulative exposure when permitting new operations\n\nRESEARCH NEEDS:\nFurther investigation should examine health outcomes, cleanup effectiveness, and long-term environmental impacts across different exposure patterns to develop comprehensive environmental justice policies.\n        ",
+  "data_summary": {
+    "total_records": 16890,
+    "major_spills": "4888",
+    "total_volume": 283675.0,
+    "historical_count": "5828",
+    "recent_count": "11062"
+  }
+}
