@@ -1,0 +1,7 @@
+spill_type,rurality,n_months,status,cov_type,R_squared
+Historical,Urban,117,ok,HAC(3),0.45100302099105694
+Historical,Suburban,65,ok,HAC(3),0.14526438639973238
+Historical,Rural,105,ok,HAC(3),0.07881822197261723
+Recent,Urban,118,ok,HAC(3),0.19595641160193988
+Recent,Suburban,92,ok,HAC(3),0.06582936319152366
+Recent,Rural,118,ok,HAC(3),0.17093150512060973
