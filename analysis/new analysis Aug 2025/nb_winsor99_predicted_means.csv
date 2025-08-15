@@ -1,0 +1,13 @@
+spill_type,Period,rurality,n,pred_mean_nb_mle
+Historical,2020 and After,Rural,1044,16.61206896551801
+Historical,2020 and After,Suburban,231,11.294372294372748
+Historical,2020 and After,Urban,3491,5.019192208536449
+Historical,Before 2020,Rural,468,12.506410256410907
+Historical,Before 2020,Suburban,108,10.694444444445006
+Historical,Before 2020,Urban,1589,4.510383889238772
+Recent,2020 and After,Rural,3302,2.5863113264689064
+Recent,2020 and After,Suburban,649,3.7750385208013877
+Recent,2020 and After,Urban,1763,2.141803743618933
+Recent,Before 2020,Rural,3279,2.487953644403907
+Recent,Before 2020,Suburban,443,3.06094808126426
+Recent,Before 2020,Urban,1453,2.878183069511512
